@@ -10,6 +10,8 @@ const const_noname = "ThisNameIsNotOnTheList";
 
 // ユーザークラス格納配列
 let userClassList = [];
+// 先頭名管理クラス初期化
+var firstnameClass = new FirstnameClass(init_firstname_array);
 // ファイルからテンプレートの読み込み
 //console.log(animal_args);
 //const const_animal_list =  JSON.parse(animal_json.random_name);
@@ -76,7 +78,7 @@ function initChangeChatName() {
 
 	  // リストに名前がなければ動物名生成とユーザー配列に新しく追加
           if(hit_flg == false){
-		  tmp_name = createAnimalName(1);
+		  tmp_name = createAnimalName();
 		  var userClass = new UserClass(display_name[0],tmp_name);
 		  userClassList.push(userClass);
 	  } 
@@ -127,24 +129,41 @@ function periodicChangeChatName() {
 }
 
 /** 新しい動物の名前を生成する関数 */
-// arg1 : インクリメントナンバー
-// return : 動物名
-function createAnimalName(number) {
-	// TODO とりあえずランダムに1つ返すようにする
-        console.log(`length -> : ${animal_args.length}`);
+// arg : なし
+// return : 動物名 (string)
+function createAnimalName() {
+        //console.log(`length -> : ${animal_args.length}`);
+	var result = "ustreamer-12345";
 
-	// 絵文字をランダムな数字で持ってくる
-        var animal_name =  animal_args[Math.floor(Math.random()* animal_args.length)]	
+	try{
+  	    // 絵文字をランダムな数字で持ってくる
+            var animal_name =  animal_args[Math.floor(Math.random()* animal_args.length)]	
 	
-	// 先頭につける文字をランダムで取得
-	var first_namber = Math.floor(Math.random()* firstname_args.length);
-	var first_name = firstname_args[first_namber];
+            if (firstnameClass.isListEmpty()) {
+	        // 先頭につける文字をランダムで取得
+	        var first_name = firstnameClass.getFirstname();
+	        result = first_name + animal_name + "さん";
+                
+	        // 取得した文字列が今後重複しないように削除
+	        /*** 先頭名情報クラスを上書きしているので注意***/
+	        firstnameClass = firstnameClass.deleteName(first_name);
 
-	
-	// 先頭の文字列は取得できたら削除して被らないようにする
-	
-	// first_name +  持ってきた絵文字 + さんで名前を生成して返却
-	return animal_args[number];
+	    }else{
+	        // 先頭名が枯渇したら数字で作る
+	        var first_name = firstnameClass.getNumbername();
+	        result = first_name + animal_name + "さん";
+
+	    }
+	    // first_name +  持ってきた絵文字 + さんで名前を生成して返却
+	    return result;
+
+	}catch (e){
+            var min = 1 ;
+            var max = 99999 ;
+            var number = Math.floor( Math.random() * (max + 1 - min) ) + min ;
+            return "ustreamer-" + String(number) ;
+
+	}
 
 }
 

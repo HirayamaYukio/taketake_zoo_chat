@@ -1,38 +1,49 @@
-// 配列に整形
-var firstname_args = firstname_str.split(/,/);
-
 // 先頭情報クラス
-class UserClass {
+class FirstnameClass {
 
-    constructor(default_name, animal_name) {
-        this.default_name = default_name;
-        this.animal_name = animal_name;
+
+    constructor(firstname_args) {
+        this.firstname_array = firstname_args;
+	this.number = 1; // リストが空になった時用の数字
     }
 
-    /** 渡されたTwitchの名前が自身のdefault_nameか確認する関数 */
-    // arg1 : 今回変更するユーザーの名前
-    // return : true -> 同じ名前, flse -> 違う名前
-    confDefaultName(arg_name) {
-	// 多重登録防止の為、デフォルト名と動物名を確認もする
-	if (this.default_name == arg_name) return  true;
-        return false;
+    /* 先頭用文字列を返却する。(ここではリストから削除しない) */
+    // arg : なし
+    // return : 
+    getFirstname() {
+        var number =  Math.floor(Math.random()* this.firstname_array.length);
+        var result  = this.firstname_array[number];
+        return  result;
     
     }
 
-    /** 渡された名前が自身のanimal_nameか確認する関数 */
-    // arg1 : 今回変更するユーザーの名前
-    // return : true -> 同じ名前, flse -> 違う名前
-    confAnimalName(arg_name) {
-        if (this.animal_name == arg_name) return true;
-        return false;
+    /* 渡された文字列をリストから削除する */
+    // arg : 削除対象
+    // return : 対象を削除したリストを保持した新しいFirstnameClass
+    deleteName(target_name) {
+	var reg = new RegExp(target_name);
+        const newlist = this.firstname_array.filter( value => ! (value.match(reg)) )
+	// 新しくクラスを作って返却
+	var newClass = new FirstnameClass(newlist);
+        return newClass;
+    }
+
+    /* リスト内文字が無くなった時用の数字を文字列で返却する関数 */
+    // arg : なし
+    // return :  [数字]の (string)
+    getNumbername() {
+	    var result = String(this.number) + "の";
+	    this.number++;
+        return result;
     
     }
 
-    /** 渡されたTwitchの名前が自身のdefault_nameか確認する関数 */
-    // arg1 : 今回変更するユーザーの名前
-    // return : 自身の動物名
-    getAnimalName() {
-        return this.animal_name;
+    /* リスト内文字があるか確認する関数*/
+    // arg : なし
+    // return : true -> あり、false -> なし
+    isListEmpty() {
+        if (this.firstname_array.length == 0) return false;
+        return true;
+    
     }
-
 }

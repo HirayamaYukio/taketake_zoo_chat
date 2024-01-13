@@ -1,6 +1,6 @@
 {
-    "name": "TAKETAKE_CHAT",
-    "description": "taketake_chat",
+    "name": "TAKETAKE_ZOOCHAT",
+    "description": "taketake_zoochat",
     "version": "1.0",
     "manifest_version": 3,
 	"content_scripts": [

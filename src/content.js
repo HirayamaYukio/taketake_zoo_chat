@@ -94,8 +94,11 @@ function initChangeChatName() {
 		  }
 	  });
 
-	  // リストに名前がなければ動物名生成とユーザー配列に新しく追加
-          if(!hit_flg){
+	  // 配信者のチャットの場合はそれとわかるようにする
+	  if(display_name_str == "たけっちノームコア" && delete_target[0].textContent == " (usttakecchi9)"){
+		  tmp_name = "でもでもでもでも👑たけっちさん";
+	  }else if(!hit_flg){
+	          // リストに名前がなければ動物名生成とユーザー配列に新しく追加
 		  tmp_name = createAnimalName();
 		  var userClass = new UserClass(display_name_str,tmp_name);
 		  userClassList.push(userClass);
@@ -147,12 +150,8 @@ function periodicChangeChatName() {
 
 	  // 配信者のチャットの場合はそれとわかるようにする
 	  if(display_name_str == "たけっちノームコア" && delete_target[0].textContent == " (usttakecchi9)"){
-	      // リストに名前がなければ動物名生成とユーザー配列に新しく追加
 		  tmp_name = "でもでもでもでも👑たけっちさん";
-
-	  } 
-	  // リストに名前がなければ動物名生成とユーザー配列に新しく追加
-          else if(!hit_flg){
+	  }else if(!hit_flg){
 	      // リストに名前がなければ動物名生成とユーザー配列に新しく追加
 		  tmp_name = createAnimalName();
 		  var userClass = new UserClass(display_name_str,tmp_name);

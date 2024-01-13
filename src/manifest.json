@@ -1,20 +1,26 @@
 {
-    "name": "TAKETAKE_ZOOCHAT",
-    "description": "taketake_zoochat",
-    "version": "1.0",
+    "name": "TAKETAKE_ZOO_CHAT",
+    "description": "taketake_zoo_chat",
+    "version": "1.0.0",
     "manifest_version": 3,
-	"content_scripts": [
+    "content_scripts": [
 	        {
 			          "js": ["first_name.js","animal_temp.js","UserClass.js","FirstnameManagerClass.js","content.js"],
 			          "css": ["chat.css"],
 			          "matches": ["https://www.twitch.tv/popout/*"]
-			        }
-	    ],
+                }
+    ],
     "permissions": [
       "tabs"
     ],
+
     "action": {
         "default_popup": "popup.html"
-    }
+    },
+    "icons": {
+    "16": "icon/taketake16_16.png",
+    "48": "icon/taketake48_48.png",
+    "128": "icon/taketake128_128.png"
+  }
 }
 

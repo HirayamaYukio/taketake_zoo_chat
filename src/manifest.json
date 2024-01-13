@@ -1,0 +1,20 @@
+{
+    "name": "TAKETAKE_CHAT",
+    "description": "taketake_chat",
+    "version": "1.0",
+    "manifest_version": 3,
+	"content_scripts": [
+	        {
+			          "js": ["UserClass.js","FirstnameManagerClass.js","animal_temp.js","content.js"],
+			          "css": ["chat.css"],
+			          "matches": ["https://www.twitch.tv/popout/*"]
+			        }
+	    ],
+    "permissions": [
+      "tabs"
+    ],
+    "action": {
+        "default_popup": "popup.html"
+    }
+}
+

@@ -1,0 +1,79 @@
+/*
+ * チャットにCSSを適用する場合はここに記述して下さい
+ */
+
+
+/* 背景透過 */
+/*
+* {
+    background: transparent !important;
+}
+*/
+/* コメント以外の部分消去 */
+/*
+.stream-chat-header,
+.Layout-sc-1xcs6mc-0.GAUVP,
+.chat-input,
+.chat-line__status {
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    border: none !important;
+}
+*/
+
+/* 名前の後ろのコロン消去 */
+/*
+span[aria-hidden="true"] {
+    display: none !important;
+}
+*/
+
+/* チャットバッジ消去 (注 サブスクバッチと名前どっちも消しちゃう)*/
+/*
+.chat-line__username-container span:first-child {
+    display: none !important;
+}
+*/
+
+/* スタンプ消去 */
+/*
+.chat-line__message--emote-button {
+    display: none !important;
+} 
+
+*/
+/* Add 名前を削除 */
+/*
+.chat-line__username {
+    display: none !important;
+}
+*/
+
+/* Add ログインIDを削除 */
+/*
+.chat-author__intl-login {
+    display: none !important;
+}
+*/
+
+/* メッセージのコンテナ */
+/*
+.chat-line__message {
+    color: rgba(255, 255, 255, 1.0) !important;
+    font-weight: bold !important;
+    font-size: 18px !important;
+    text-shadow: #000 1px 1px 0, #000 -1px 1px 0, #000 1px -1px 0, #000 -1px -1px 0;
+    border-radius: 15px;
+    margin-bottom: 3px !important;
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+    background: rgba(128, 128, 128, 0.5) !important;
+    font-family: メイリオ;
+    padding: 5px 10px 5px 10px;
+    float: left;
+    clear: both;
+}
+
+
+*/

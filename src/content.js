@@ -35,6 +35,8 @@ const init_firstname_array = firstname_array.filter((element, index) => {
 var firstnameClass = new FirstnameClass(init_firstname_array);
 // 動物名初期読み込み
 const animal_args = animal_str.split(/\n/);
+// 初期処理ポーリング時間
+const const_polling_msec = 5000;
 
 /*
   監視設定
@@ -61,16 +63,16 @@ const config = {
 var millisec = 0;
 const initInterval = function(){
     // チャット一覧を取得
-    // 初期チャットが読み込まれるかわからないので、初めの3秒はポーリングで監視
+    // 初期チャットが読み込まれるかわからないので、初めのn秒はポーリングで監視
     var elements_list = document.getElementsByClassName('chat-line__message');
-    if (elements_list.length != 0 && millisec < 3000){
+    if (elements_list.length != 0 && millisec < const_polling_msec ){
         // 初回の名前変更
         initChangeChatName();
         // 定期状態監視登録
         observer.observe(elem, config);
         // タイマ停止
         clearInterval(initIntervalId);
-    }else if (millisec < 3000){
+    }else if (millisec < const_polling_msec){
         millisec += 10;
     }else{
         // 一定時間経過後は定期状態監視登録してタイマ停止

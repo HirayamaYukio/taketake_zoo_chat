@@ -1,23 +1,27 @@
 /*
  メインファイル。
  全体の流れ:
- 1. タイマーの設定
-   ブラウザの読み込みを待つためにワンショットタイマでディレイを掛ける
+ 1. Interval Timerの設定
+   初期チャットが読み込まれるまでポーリングして、チャットがあれば1-1.を行う。
+   一定時間経過して初期チャットが読み込まれなければ1-2.を行う。
+
    (ホントは読み込み完了イベントの検知で発火させたほうがいい)
- 2. 初期チャットへの置換処理(initChangeChatName();のcall)
+ 1-1. 初期チャットへの置換処理(initChangeChatName();のcall)
     初期表示されたチャットへ名前変換の処理を行う(50行くらい)
- 3. 定期的に実行する名前変換処理を登録する
-    チャットが更新される(正確にはdocument.getElementById('root')以下)と
+　　その後、定期監視処理2.を登録して自身を停止する。
+ 1-2. 定期監視処理2.を登録して自身を停止する。
+
+2.  チャットが更新される(正確にはdocument.getElementById('root')以下)と
     最新から数個のチャットに対して処理をする
- ! 拡張機能を止めるときはChromeの管理機能からして下さい。
+
+! 拡張機能を止めるときはChromeの管理機能からして下さい。
 */
 
-console.log("taketakeスプリクトの読み込み成功");
+console.log("Taketake script loaded!");
 
 /*
  共通変数
 */
-const const_noname = "ThisNameIsNotOnTheList";
 // ユーザークラス格納配列
 let userClassList = [];
 // 先頭名初期読み込み
@@ -31,8 +35,6 @@ const init_firstname_array = firstname_array.filter((element, index) => {
 var firstnameClass = new FirstnameClass(init_firstname_array);
 // 動物名初期読み込み
 const animal_args = animal_str.split(/\n/);
-
-
 
 /*
   監視設定
@@ -56,17 +58,30 @@ const config = {
   タイマーのコールバック関数と宣言
 */
 //タイマー登録で初回処理をした後に、定期状態監視を登録する
-const log = function(){
-    // 初回の名前変更
-    initChangeChatName();
-    // 監視の登録
-    observer.observe(elem, config);
-    console.log(`regist observe`);
+var millisec = 0;
+const initInterval = function(){
+    // チャット一覧を取得
+    // 初期チャットが読み込まれるかわからないので、初めの3秒はポーリングで監視
+    var elements_list = document.getElementsByClassName('chat-line__message');
+    if (elements_list.length != 0 && millisec < 3000){
+        // 初回の名前変更
+        initChangeChatName();
+        // 定期状態監視登録
+        observer.observe(elem, config);
+        // タイマ停止
+        clearInterval(initIntervalId);
+    }else if (millisec < 3000){
+        millisec += 10;
+    }else{
+        // 一定時間経過後は定期状態監視登録してタイマ停止
+        observer.observe(elem, config);
+        clearInterval(initIntervalId);
+
+    }
 
 };
-
-// ブラウザ読み込み後すぐだと動かないのでDelay
-setTimeout(log, 3000);
+// 初期チャット読み込みに対応するためのポーリング処理とその後の定期監視を登録するタイマ
+let initIntervalId = setInterval(initInterval, 10);
 
 
 /*

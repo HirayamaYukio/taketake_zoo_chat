@@ -21,7 +21,12 @@ const const_noname = "ThisNameIsNotOnTheList";
 // ユーザークラス格納配列
 let userClassList = [];
 // 先頭名初期読み込み
-var init_firstname_array = firstname_str.split(/,/);
+var firstname_array = firstname_str.split(/,/);
+// 先頭名配列を重複削除して初期化
+const init_firstname_array = firstname_array.filter((element, index) => {
+    return firstname_array.indexOf(element) == index;
+})
+
 // 先頭名管理クラス初期化
 var firstnameClass = new FirstnameClass(init_firstname_array);
 // 動物名初期読み込み

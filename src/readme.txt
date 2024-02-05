@@ -12,8 +12,8 @@ TAKETAKE ZOO CHAT readme
 src/manifest.jsonに記載している以下の行を任意のアドレスに変更して下さい。
 初期値↓はポップアップしたすべてのTwitchチャットに適応されるので、
 初期値："matches": ["https://www.twitch.tv/popout/*"]
-ご自身のチャットのURLに絞って下さい。
-例："matches": ["https://www.twitch.tv/usttakecchi9/popout/*"]
+ご自身のチャットのURLに絞って下さい。(フルパスでも可)
+例："matches": ["https://www.twitch.tv/popout/usttakecchi9/chat?popout="]
 
 ⚠️ファイルの構造(Json形式)は崩さないように編集してください。
 

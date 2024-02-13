@@ -1,12 +1,31 @@
+<!DOCTYPE html>
 <html>
-  <head>
-   <title>taketake</title>
-   <meta charset="UTF-8">
-   <link rel="stylesheet" type="text/css" href="popup.css">
-  </head>
-      <body>
-    	  <h3>自分を好きになれない奴が、どうして他人に好きになってもらえるか。</h3>
-    	  <h3>俺に足りないものは…</h3>
-      </body>
-</html>
+   <title>TAKETAKE ZOO CHATS</title>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="path/to/fontawesome/css/all.min.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="popup.css">
+    </head>
+    <body>
+        <h1>TAKETAKE ZOO CHATS</h1>
+        <input type="text" class="animal_name" id="animal_text" value="Init">
+        <button class="copy" id="copy_animal" data-clipboard-target="#animal_text" data-clipboard-action="copy"><span class="material-icons"> content_copy </span></button>
+        <button class="delete" id="delete_animal"><span class="material-icons"> delete_forever </span></button>
 
+        <input type="text" class="first_name" id="first_text" value="Init">
+        <button class="copy" id="copy_first"  data-clipboard-target="#first_text" data-clipboard-action="copy"><span class="material-icons"> content_copy </span></button>
+        <button class="delete" id="delete_first"><span class="material-icons"> delete_forever </span></button>
+
+        <div class="msg">
+            <p class="copied">Copied!</p>
+            <p class="failed">failed...</p>
+        </div>
+        <script src="clipboard.min.js"></script>
+        <script src="animal_temp.js"></script>
+        <script src="first_name.js"></script>
+        <script src="popup.js"></script>
+    </body>
+</html>

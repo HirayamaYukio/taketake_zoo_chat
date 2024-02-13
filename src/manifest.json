@@ -1,7 +1,7 @@
 {
     "name": "TAKETAKE ZOO CHAT",
     "description": "taketake zoo chat",
-    "version": "1.0.3",
+    "version": "2.1.1",
     "manifest_version": 3,
     "content_scripts": [
 	        {
@@ -10,10 +10,7 @@
 			          "matches": ["https://www.twitch.tv/popout/*"]
                 }
     ],
-    "permissions": [
-      "tabs"
-    ],
-
+    "permissions": [ "storage" ],
     "action": {
         "default_popup": "popup.html"
     },

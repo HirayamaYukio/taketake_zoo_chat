@@ -1,4 +1,128 @@
-/* ポップアップウィンドウのCSS */
-body {
-  min-width: 400px;
+@import url("https://fonts.googleapis.com/css?family=Muli");
+
+*{
+  box-sizing: border-box;
+  margin: auto;
+  font-family: "Muli", sans-serif;
+  color: #fff;
+}
+
+h1{
+  grid-area: header;
+  text-align: center;
+}
+
+button{
+  width: 30px;
+  padding: 10px;
+  margin: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  background: #666;
+  border-radius: 10px;
+}
+
+input{
+  width: 95%;
+  height: 40px;
+  padding: 8px;
+  font-size: 18px;
+  color: #555;
+}
+input#result{
+  grid-area: result;
+}
+
+input#animal_name{
+  grid-area: animal_name;
+}
+
+input#first_name{
+  grid-area: first_name;
+}
+
+body{
+  --height: 60px;
+  display: grid;
+  grid-template-areas: "header header header"
+    "animal_name copyAnimalBtn deleteAnimalBtn"
+    "first_name copyFirstBtn deleteFirstBtn"
+    "notice notice notice";
+  grid-template-rows: var(--height) var(--height) var(--height) var(--height);
+  grid-template-columns: 1fr 40px 40px;
+  width: 400px;
+  padding: 8px;
+  background: #333;
+}
+
+button.copy{
+  width: 40px;
+  height: 40px;
+  padding: 4px;
+  font-size: 24px;
+  border-radius: 20px;
+}
+
+button#copy_animal{
+  grid-area: copyAnimalBtn;
+}
+
+button#copy_first{
+  grid-area: copyFirstBtn;
+}
+
+button.delete{
+  width: 40px;
+  height: 40px;
+  padding: 4px;
+  font-size: 24px;
+  border-radius: 20px;
+}
+
+button#delete_animal{
+  grid-area: deleteAnimalBtn;
+}
+
+button#delete_first{
+  grid-area: deleteFirstBtn;
+}
+
+button.ttl{
+  grid-area: ttlBtn;
+}
+
+button.url{
+  grid-area: urlBtn;
+}
+
+button.bmark{
+  grid-area: markBtn;
+}
+
+p{
+  z-index: 2;
+  grid-area: notice;
+  width: max-content;
+  text-align: right;
+}
+
+div.msg{
+  z-index: 300;
+  display: none;
+  grid-area: msg;
+  width: 100px;
+  height: 30px;
+  padding: 4px 18px;
+  margin-right: 0;
+  font-size: 18px;
+  background: #eee;
+  border-radius: 15px;
+}
+
+p.copied, p.failed{
+  position: absolute;
+  z-index: 350;
+  display: none;
+  grid-area: unset;
+  color: #333;
 }

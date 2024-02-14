@@ -22,7 +22,17 @@ button{
   border-radius: 10px;
 }
 
+button#storage_save{
+  grid-area: storageSave;
+  width: 70px;
+  font-size: 12px;
+  cursor: pointer;
+  background: #666;
+  border-radius: 10px;
+}
+
 select{
+  grid-area: displayMode;
   width: 95%;
   height: 40px;
   padding: 8px;
@@ -63,7 +73,7 @@ body{
   grid-template-areas: "header header header"
     "animal_name copyAnimalBtn deleteAnimalBtn"
     "first_name copyFirstBtn deleteFirstBtn"
-    "notice notice notice";
+    "displayMode storageSave storageSave";
   grid-template-rows: var(--height) var(--height) var(--height) var(--height);
   grid-template-columns: 1fr 40px 40px;
   width: 400px;

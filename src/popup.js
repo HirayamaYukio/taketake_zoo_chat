@@ -10,13 +10,17 @@ window.addEventListener('load',()=>{
 //var StorageClass = new StorageClass("test_key1", "test_value1");
 
 // ベース名の初期化
-chrome.storage.sync.get(['animal_list'], function (value) {
+chrome.storage.local.get(['animal_list'], function (value) {
     if (typeof value.animal_list === 'undefined') {
         // 初回はデータが存在しないためテンプレートを入れる
         console.log("init none");
         // htmlのテキストにセット
 	var animal_input = document.getElementById("animal_text");
 	animal_input.value = animal_str;
+
+        // 初期保存処理
+            chrome.storage.local.set({'animal_list': animal_input.value }, function () {
+        });
 	
     } else {
 	// ロードした内容をinput textに書き込み
@@ -27,38 +31,72 @@ chrome.storage.sync.get(['animal_list'], function (value) {
 	animal_input.value = value.animal_list;
     }
     // 保存処理
-        //chrome.storage.sync.set({'messages': value.messages }, function () {
+        //chrome.storage.local.set({'messages': value.messages }, function () {
     //});
 });
 
 // 先頭名の初期化
-chrome.storage.sync.get(['first_list'], function (value) {
+chrome.storage.local.get(['first_list'], function (value) {
     if (typeof value.first_list === 'undefined') {
         // 初回はデータが存在しないためテンプレートを入れる
         console.log("init none");
         // htmlのテキストにセット
-	var animal_input = document.getElementById("first_text");
-	animal_input.value = firstname_str;
+	var first_input = document.getElementById("first_text");
+	first_input.value = firstname_str;
+
+        // 初期保存処理
+        chrome.storage.local.set({'first_list': first_input.value }, function () {
+        });
 	
     } else {
 	// ロードした内容をinput textに書き込み
         //value.messages.push(message);
         console.log("loaded date ->" + value.first_list);
         // htmlのテキストにセット
-	var animal_input = document.getElementById("first_text");
-	animal_input.value = value.first_list;
+	var first_input = document.getElementById("first_text");
+	first_input.value = value.first_list;
     }
     // 保存処理
-        //chrome.storage.sync.set({'messages': value.messages }, function () {
+        //chrome.storage.local.set({'messages': value.messages }, function () {
     //});
 });
 
 // 保存
 /*
-chrome.storage.sync.set({'messages': value}, function () {
+chrome.storage.local.set({'messages': value}, function () {
     console.log(value.messages);
 });
 */
+
+// 表示モードの初期化
+chrome.storage.local.get(['display_mode'], function (value) {
+    if (typeof value.animal_list === 'undefined') {
+        // 初回はデータが存在しないためテンプレートを入れる
+        console.log("init none");
+        // htmlのテキストにセット
+	var display_select = document.getElementById("display_mode");
+	display_select.value = "1";
+	//display_select[1].selected = true;
+
+        // 初期保存処理
+            chrome.storage.local.set({'display_mode': display_select.value }, function () {
+        });
+	
+    } else {
+	// ロードした内容でselectを変更
+        //value.messages.push(message);
+        console.log("loaded date ->" + value.display_mode);
+        // htmlのにセット
+	var display_select = document.getElementById("display_mode");
+	display_select.value = value.display_mode;
+	var index = int(value.display_mode);
+	    // TODO バッグてる？
+	display_select[1].selected = true;
+    }
+    // 保存処理
+        //chrome.storage.local.set({'messages': value.messages }, function () {
+    //});
+});
 })
 
 
@@ -108,7 +146,7 @@ document.getElementById("copy_first").addEventListener("click",()=>{
      //console.log("click!!!");  // 出力は、「ポップアップを検証」で見れる。
 }, false);
 
-// ベース名リストのクリア
+// ベース名リストのクリアボタン
 document.getElementById("delete_animal").addEventListener("click",()=>{
 
 	var animal_input = document.getElementById("animal_text");
@@ -116,10 +154,36 @@ document.getElementById("delete_animal").addEventListener("click",()=>{
 
 }, false);
 
-// 先頭名リストのクリア
+// 先頭名リストのクリアボタン
 document.getElementById("delete_first").addEventListener("click",()=>{
 
 	var animal_input = document.getElementById("first_text");
 	animal_input.value = "";
+
+}, false);
+
+// 設定保存ボタン
+document.getElementById("storage_save").addEventListener("click",()=>{
+
+        // ベース名リストのテキストを取得
+	var animal_input = document.getElementById("animal_text");
+	//animal_input.value = animal_str;
+        // ベース名保存処理
+        chrome.storage.local.set({'animal_list': animal_input.value }, function () {
+        });
+
+        // 先頭名リストのテキストを取得
+	var first_input = document.getElementById("first_text");
+	//animal_input.value = animal_str;
+        // 保存処理
+        chrome.storage.local.set({'first_list': first_input.value }, function () {
+        });
+
+        // 表示モードを取得
+	var display_select = document.getElementById("display_mode");
+	//animal_input.value = animal_str;
+        // 保存処理
+        chrome.storage.local.set({'display_mode': display_select.value }, function () {
+        });
 
 }, false);

@@ -2,9 +2,10 @@
 class NoticeClass {
 
     constructor(message) {
-        this.message = message;
+        this.message = message; // TODO ここは""に括られてメッセージが来るから抽出は注意
         this.stream_id = "ustreamer";
         this.split_msg = "";
+	// TODO バグってるから単体テストでデバッグ
 	this.initFlg = initSplitMsg(message);
     }
 

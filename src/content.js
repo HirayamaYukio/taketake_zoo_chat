@@ -22,21 +22,47 @@ console.log("Taketake script loaded!");
 /*
  共通変数
 */
+// 初期処理ポーリング時間
+const const_polling_msec = 5000;
+
+/*
+ 初期化
+*/
+// TODO ローカルストレージの領域は共有されないから、popupから
+// 保存した情報をリッスンで受け取る必要がある
+
 // ユーザークラス格納配列
 let userClassList = [];
+// ベース名リスト初期化
+var animalStorage = new StorageClass("animal_list");
+var animal_sto_str = animalStorage.getStorage();
+if (animal_sto_str == "None") {
+    alert('ベース名が初期化されてません');
+    animal_sto_str = animal_str; 
+}
+const animal_args = animalStorage.splitComma(animal_sto_str);
+
+// 先頭名初期化
+var firstStorage = new StorageClass("first_list");
+var first_str = firstStorage.getStorage();
+if (first_str == "None") {
+    alert('先頭名が初期化されてません');
+    first_str = firstname_str;
+}
+const init_firstname_array = firstStorage.splitComma(first_str);
+
+// 動物名初期読み込み
+//const animal_args = animal_str.split(/,/);
+//
 // 先頭名初期読み込み
-var firstname_array = firstname_str.split(/,/);
+//var firstname_array = firstname_str.split(/,/);
 // 先頭名配列を重複削除して初期化
-const init_firstname_array = firstname_array.filter((element, index) => {
-    return firstname_array.indexOf(element) == index;
-})
+//const init_firstname_array = firstname_array.filter((element, index) => {
+ //   return firstname_array.indexOf(element) == index;
+//})
 
 // 先頭名管理クラス初期化
 var firstnameClass = new FirstnameClass(init_firstname_array);
-// 動物名初期読み込み
-const animal_args = animal_str.split(/,/);
-// 初期処理ポーリング時間
-const const_polling_msec = 5000;
 
 /*
   監視設定
@@ -121,6 +147,8 @@ function initChangeChatName() {
 		  }
 	  });
 
+	  // TODO 設定で配信者の名前はフィルタしないようになっていたらそうする
+
 	  if(!hit_flg){
 	          // リストに名前がなければ動物名生成とユーザー配列に新しく追加
 		  tmp_name = createAnimalName();
@@ -175,6 +203,7 @@ function periodicChangeChatName() {
 		  }
 	  });
 
+	  // TODO 設定で配信者の名前はフィルタしないようになっていたらそうする
 	  if(!hit_flg){
 	      // 置換後リストに名前がなければ動物名生成とユーザー配列に新しく追加
 	      tmp_name = createAnimalName();
@@ -254,13 +283,37 @@ function createAnimalName() {
 	var result = "ustreamer-23456";
 
 	try{
+		// TODO 設定の数字モードと先頭名付与モードで処理をシフト
+	   // if 
+	    // first_name +  持ってきた絵文字 + さんで名前を生成して返却
+            result = createNumberName();
+	    return result;
+
+	}catch (e){
+            console.log(`Into catch e-> : ${e}`);
+            var min = 1 ;
+            var max = 99999 ;
+            var number = Math.floor( Math.random() * (max + 1 - min) ) + min ;
+            return "ustreamer-" + String(number) ;
+
+	}
+
+}
+
+/** 先頭名で動物の名前を生成する関数 */
+// arg : なし
+// return : 動物名 (string)
+function createFirstName() {
+	var result = "ustreamer-23456";
+
+	try{
   	    // 絵文字をランダムな数字で持ってくる
             var animal_name =  animal_args[Math.floor(Math.random()* animal_args.length)]	
 	
             if (firstnameClass.isListEmpty()) {
 	        // 先頭につける文字をランダムで取得
 	        var first_name = firstnameClass.getFirstname();
-	        result = first_name + animal_name + "さん";
+	        result = first_name + animal_name;
                 
 	        // 取得した文字列が今後重複しないように削除
 	        /*** 先頭名情報クラスを上書きしているので注意***/
@@ -268,11 +321,10 @@ function createAnimalName() {
 
 	    }else{
 	        // 先頭名が枯渇したら数字で作る
-	        var first_name = firstnameClass.getNumbername();
-	        result = first_name + animal_name + "さん";
+	        result = createNumberName();
 
 	    }
-	    // first_name +  持ってきた絵文字 + さんで名前を生成して返却
+	    // first_name +  持ってきた絵文字 で名前を生成して返却
 	    return result;
 
 	}catch (e){
@@ -283,4 +335,21 @@ function createAnimalName() {
 
 	}
 
+}
+
+/** 数字モードで新しい動物の名前を生成する関数 */
+// arg : なし
+// return : 動物名 (string)
+function createNumberName() {
+	var result = "ustreamer-23456";
+
+	// 絵文字をランダムな数字で持ってくる
+	var animal_name =  animal_args[Math.floor(Math.random()* animal_args.length)]	
+
+	// 末尾の文字列を生成
+	var number_str = firstnameClass.getNumbername();
+	result = animal_name + number_str;
+
+	// 持ってきた絵文字 + 数字で名前を生成して返却
+	return result;
 }

@@ -22,6 +22,22 @@ button{
   border-radius: 10px;
 }
 
+select{
+  width: 95%;
+  height: 40px;
+  padding: 8px;
+  font-size: 18px;
+  color: #555;
+}
+
+option{
+  width: 95%;
+  height: 40px;
+  padding: 8px;
+  font-size: 18px;
+  color: #555;
+}
+
 input{
   width: 95%;
   height: 40px;

@@ -34,7 +34,7 @@ const init_firstname_array = firstname_array.filter((element, index) => {
 // 先頭名管理クラス初期化
 var firstnameClass = new FirstnameClass(init_firstname_array);
 // 動物名初期読み込み
-const animal_args = animal_str.split(/\n/);
+const animal_args = animal_str.split(/,/);
 // 初期処理ポーリング時間
 const const_polling_msec = 5000;
 
@@ -45,6 +45,8 @@ const const_polling_msec = 5000;
 var observer = new MutationObserver(function(){
 	// 定期チャット名変更
 	periodicChangeChatName();
+	// お知らせチャット名変更
+	periodicChangeNoticeName();
 });
 
 // 監視要素
@@ -99,6 +101,7 @@ function initChangeChatName() {
       try{
           var display_name = value.getElementsByClassName('chat-author__display-name');
           var display_name_str = display_name[0].textContent; // 名前の文字列だけを抽出
+          var stream_id = display_name[0].getAttribute('data-a-user') // idの取得
           // textContentが取得できない場合は非チャットとして処理をスキップ
           //console.log(`OUT PUT will replace: ${animal[0].outerHTML}`);
           //console.log(`OUT PUT will replace: ${animal[0].textContent}`);
@@ -109,20 +112,19 @@ function initChangeChatName() {
 		  // 動物の名前になっていたら処理を1ループスキップ
 		  if (instance.confAnimalName(display_name_str) && !hit_flg) throw "This name processed";
 
-		  // リストにすでに名前あり
-		  if (instance.confDefaultName(display_name_str) && !hit_flg){
+		  // リストにすでにidあり
+		  if (instance.confStreamId(stream_id) && !hit_flg){
 		      tmp_name = instance.getAnimalName();
+		      // お知らせチャットを先にしてた場合、default_nameが無いので一応ここらでいれる
+		      instance.setDefaultNameIfBlank(display_name_str);
 	              hit_flg = true;
 		  }
 	  });
 
-	  // 配信者のチャットの場合はそれとわかるようにする
-	  if(display_name_str == "たけっちノームコア" && delete_target[0].textContent == " (usttakecchi9)"){
-		  tmp_name = "でもでもでもでも👑たけっちさん";
-	  }else if(!hit_flg){
+	  if(!hit_flg){
 	          // リストに名前がなければ動物名生成とユーザー配列に新しく追加
 		  tmp_name = createAnimalName();
-		  var userClass = new UserClass(display_name_str,tmp_name);
+		  var userClass = new UserClass(stream_id,display_name_str,tmp_name);
 		  userClassList.push(userClass);
 	  } 
  
@@ -157,27 +159,27 @@ function periodicChangeChatName() {
           // textContentが取得できない場合は非チャットとして処理をスキップ
           var tmp_name = "ustreamer-12345";
 	  var hit_flg = false;
-          var display_name_str = display_name[0].textContent;
+          var display_name_str = display_name[0].textContent; // 表示名の取得
+          var stream_id = display_name[0].getAttribute('data-a-user') // idの取得
 	  // UserClassListを確認して名前を変更したことがあるか確認
 	  userClassList.forEach(instance => {
 		  // 動物の名前になっていたら処理を1ループスキップ
 		  if (instance.confAnimalName(display_name_str) && !hit_flg) throw "This name processed";
 
-		  // リストにすでに名前あり
-		  if (instance.confDefaultName(display_name_str) && !hit_flg){
+		  // 置換後リストにすでにidあり
+		  if (instance.confStreamId(stream_id) && !hit_flg){
 		      tmp_name = instance.getAnimalName();
+		      // お知らせチャットを先にしてた場合、default_nameが無いので一応ここらでいれる
+		      instance.setDefaultNameIfBlank(display_name_str);
 	              hit_flg = true;
 		  }
 	  });
 
-	  // 配信者のチャットの場合はそれとわかるようにする
-	  if(display_name_str == "たけっちノームコア" && delete_target[0].textContent == " (usttakecchi9)"){
-		  tmp_name = "でもでもでもでも👑たけっちさん";
-	  }else if(!hit_flg){
-	      // リストに名前がなければ動物名生成とユーザー配列に新しく追加
-		  tmp_name = createAnimalName();
-		  var userClass = new UserClass(display_name_str,tmp_name);
-		  userClassList.push(userClass);
+	  if(!hit_flg){
+	      // 置換後リストに名前がなければ動物名生成とユーザー配列に新しく追加
+	      tmp_name = createAnimalName();
+	      var userClass = new UserClass(stream_id,display_name_str,tmp_name);
+	      userClassList.push(userClass);
 	  } 
  
 	 // チャット欄の名前を置き換える
@@ -188,6 +190,56 @@ function periodicChangeChatName() {
 	  if (delete_target != null ){
               delete_target[0].textContent = "";
 	  }
+      }catch (e){
+          //console.log(`Into catch e-> : ${e}`);
+
+      }
+     }
+}
+
+/** お知らせチャット名置換関数 */
+function periodicChangeNoticeName() {
+    var elements_list = document.getElementsByClassName('user-notice-line');
+    var elements_size = elements_list.length;
+    
+    // とりあえず定期実行は最大5回しか回さないようにする
+    for (let i = 0; i < 5; i++) {
+      try{
+	  // 後ろから回したいから新しいindexを作成
+	  var index = elements_size -i ;
+          //var animal = elements_list[index].getElementsByClassName('chat-author__display-name');
+	  // 引き換えメッセージの取得
+          var notice_message = elements_list[index].getElementsByClassName('Layout-sc-1xcs6mc-0');
+	  // お知らせ情報クラスを作成
+	  var noticeClass = new NoticeClass(notice_message[0].textContent);
+
+	  var hit_flg = false;
+          //var display_name_str = display_name[0].textContent;
+	  // UserClassListを確認して置換後リストにidがあるか確認
+	  userClassList.forEach(instance => {
+		  // 置換後リストに同じidあり
+		  if (instance.confDefaultName(display_name_str) && !hit_flg){
+		      tmp_name = instance.getAnimalName();
+	              hit_flg = true;
+		  }
+	  });
+
+	  if(!hit_flg){
+	      // 置換後リストに名前がなければ動物名生成とユーザー配列に新しく追加
+	      // (ただし、表示名は取れないのでダミーを格納)
+	      tmp_name = createAnimalName();
+	      var userClass = new UserClass(noticeClass.stream_id,"",tmp_name);
+	      userClassList.push(userClass);
+	  } 
+	 // 置換後お知らせメッセージを作成
+	 if (noticClass.initFlg){
+	     result_msg = tmp_name + noticeClass.split_msg;
+	     //お知らせメッセージを置換
+             notice_message[0].textContent = result_msg;
+	 }else{
+             // noticeClassの初期化に失敗してたらエラー表示
+             console.log("noticeClass initFlg is False");
+	 }
       }catch (e){
           //console.log(`Into catch e-> : ${e}`);
 

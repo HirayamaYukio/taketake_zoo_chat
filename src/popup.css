@@ -58,6 +58,9 @@ input{
 input#result{
   grid-area: result;
 }
+input#host_id{
+  grid-area: host_id;
+}
 
 input#animal_name{
   grid-area: animal_name;
@@ -71,6 +74,7 @@ body{
   --height: 60px;
   display: grid;
   grid-template-areas: "header header header"
+    "host_id copyHostBtn deleteHostBtn"
     "animal_name copyAnimalBtn deleteAnimalBtn"
     "first_name copyFirstBtn deleteFirstBtn"
     "displayMode storageSave storageSave";
@@ -89,6 +93,10 @@ button.copy{
   border-radius: 20px;
 }
 
+button#copy_host{
+  grid-area: copyHostBtn;
+}
+
 button#copy_animal{
   grid-area: copyAnimalBtn;
 }
@@ -103,6 +111,10 @@ button.delete{
   padding: 4px;
   font-size: 24px;
   border-radius: 20px;
+}
+
+button#delete_host{
+  grid-area: deleteHostBtn;
 }
 
 button#delete_animal{

@@ -1,5 +1,32 @@
 console.log("popup.js is loaded");
 
+/*
+  ローカル設定のロードとpopup画面の初期化
+*/
+// Host idの初期化
+chrome.storage.local.get(['host_id'], function (value) {
+    if (typeof value.host_id === 'undefined') {
+        // 初回はデータが存在しないためテンプレートを入れる
+        // htmlのテキストにセット
+	var host_input = document.getElementById("host_id");
+	host_input.value = "";
+
+        // 初期保存処理
+            chrome.storage.local.set({'host_id': "" }, function () {
+        });
+	
+    } else {
+	// ロードした内容をinput textに書き込み
+        //value.messages.push(message);
+        console.log("loaded date ->" + value.host);
+        // htmlのテキストにセット
+	var host_input = document.getElementById("host_id");
+	host_input.value = value.host_id;
+    }
+    // 保存処理
+        //chrome.storage.local.set({'messages': value.messages }, function () {
+    //});
+});
 // ベース名の初期化
 chrome.storage.local.get(['animal_list'], function (value) {
     if (typeof value.animal_list === 'undefined') {
@@ -61,7 +88,7 @@ chrome.storage.local.set({'messages': value}, function () {
 
 // 表示モードの初期化
 chrome.storage.local.get(['display_mode'], function (value) {
-    if (typeof value.animal_list === 'undefined') {
+    if (typeof value.display_mode === 'undefined') {
         // 初回はデータが存在しないためテンプレートを入れる
         console.log("init none");
         // htmlのテキストにセット
@@ -80,7 +107,7 @@ chrome.storage.local.get(['display_mode'], function (value) {
         // htmlのにセット
 	var display_select = document.getElementById("display_mode");
 	display_select.value = value.display_mode;
-	var index = int(value.display_mode);
+	var index = Number(value.display_mode);
 	    // TODO バッグてる？
 	display_select[index].selected = true;
     }
@@ -107,6 +134,25 @@ window.addEventListener('load',()=>{
 /*
  * popup.htmlにあるボタンのクリックイベント
  */
+// ベースの名前リストのコピーボタン
+document.getElementById("copy_host").addEventListener("click",()=>{
+
+ const cb = new ClipboardJS('button#copy_host');
+ cb.on("success", function(e){
+     console.log('Copied Successfully.', e);
+     setTimeout(()=>{
+         console.log("time out");  // 出力は、「ポップアップを検証」で見れる。
+     },3000);
+ });
+ cb.on("error", function(e) {
+     console.error('Failed to Copy.', e);
+     setTimeout(()=>{
+         console.log("time out");  // 出力は、「ポップアップを検証」で見れる。
+     },3000);
+ });
+
+}, false);
+
 // ベースの名前リストのコピーボタン
 document.getElementById("copy_animal").addEventListener("click",()=>{
 
@@ -147,6 +193,14 @@ document.getElementById("copy_first").addEventListener("click",()=>{
      //console.log("click!!!");  // 出力は、「ポップアップを検証」で見れる。
 }, false);
 
+// host idのクリアボタン
+document.getElementById("delete_host").addEventListener("click",()=>{
+
+	var host_input = document.getElementById("host_id");
+	host_input.value = "";
+
+}, false);
+
 // ベース名リストのクリアボタン
 document.getElementById("delete_animal").addEventListener("click",()=>{
 
@@ -166,8 +220,11 @@ document.getElementById("delete_first").addEventListener("click",()=>{
 // 設定保存ボタン
 document.getElementById("storage_save").addEventListener("click",()=>{
 
-	// TODO host id
-	var host_id = "";
+	// host idのテキストソ取得
+	var host_id = document.getElementById("host_id");
+        // host id保存処理
+        chrome.storage.local.set({'host_id': host_id.value }, function () {
+        });
 
         // ベース名リストのテキストを取得
 	var animal_input = document.getElementById("animal_text");
@@ -189,19 +246,5 @@ document.getElementById("storage_save").addEventListener("click",()=>{
         // 保存処理
         chrome.storage.local.set({'display_mode': display_select.value }, function () {
         });
-
-          // backgrounc.jsに設定を送信する
-	//  chrome.runtime.sendMessage({
-	//      hostId: host_id,
-	//      animalsName: animal_input.value,
-	//      firstsName: first_input.value,
-	//      displayMode: display_select.value
-	//    },
-        //    // 送った後にレスポンス受け取りたいならこう
-	//    //function(response) {
-        //    //  console.log("Return msg ->"+ response.msg);
-	//    //  //document.getElementById("div").textContent = response.msg;
-	// //}
-	//  );
 
 }, false);

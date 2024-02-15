@@ -5,7 +5,7 @@
     "manifest_version": 3,
     "content_scripts": [
 	        {
-			          "js": ["first_name.js","animal_temp.js","SettingClass.js","StorageClass.js","NoticeClass.js","UserClass.js","FirstnameManagerClass.js","content.js"],
+			          "js": ["first_name.js","animal_temp.js","StorageClass.js","NoticeClass.js","UserClass.js","FirstnameManagerClass.js","content.js"],
 			          "css": ["chat.css"],
 			          "matches": ["https://www.twitch.tv/popout/*"]
                 }

@@ -11,6 +11,10 @@
     </head>
     <body>
         <h1>TAKETAKE ZOO CHATS</h1>
+        <input type="text" class="host_id" id="host_id" value="">
+        <button class="copy" id="copy_host" data-clipboard-target="#host_id" data-clipboard-action="copy"><span class="material-icons"> content_copy </span></button>
+        <button class="delete" id="delete_host"><span class="material-icons"> delete_forever </span></button>
+
         <input type="text" class="animal_name" id="animal_text" value="Init">
         <button class="copy" id="copy_animal" data-clipboard-target="#animal_text" data-clipboard-action="copy"><span class="material-icons"> content_copy </span></button>
         <button class="delete" id="delete_animal"><span class="material-icons"> delete_forever </span></button>
@@ -18,11 +22,13 @@
         <input type="text" class="first_name" id="first_text" value="Init">
         <button class="copy" id="copy_first"  data-clipboard-target="#first_text" data-clipboard-action="copy"><span class="material-icons"> content_copy </span></button>
         <button class="delete" id="delete_first"><span class="material-icons"> delete_forever </span></button>
-        <button class="save" id="storage_save">Save All</button>
+        <button class="save" id="storage_save">Save all</button>
 	<select name="display mode" id="display_mode" >
             <option value="0">数字モード</option>
             <option value="1">先頭名付加モード</option>
         </select>
+	⚠️変更は保存していないと、ポップアップを閉じると削除されます。</br>
+	⚠️Save all をした後はチャットを更新して設定を反映させてください。
         <div class="msg">
             <p class="copied">Copied!</p>
             <p class="failed">failed...</p>

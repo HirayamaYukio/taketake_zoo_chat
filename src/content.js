@@ -37,24 +37,6 @@ var init_param_flg = false;
 // 共通変数の初期化
 initParam();
 
-// 受信テスト
-//chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-//  if (request !== 'SET_BG') {
-//      console.log('Catchresuest');
-//      return true;
-//  }
-//      return false;
-//})
-//
-// TODO ロードのタイミングでbackground.js にある設定値を取得する
-
-// ここでは文字列('hello')でメッセージを送ってますが、オブジェクトでもよい
-//chrome.runtime.sendMessage('getSetting', (receive) => {
-//    // 送り返されるものがなければ、このコールバックは必要ない
-//    console.log(receive); // sendResponse で送り返された {} 空のObject
-//});
-
-
 
 /*
   監視設定

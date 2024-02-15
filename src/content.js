@@ -24,45 +24,37 @@ console.log("Taketake script loaded!");
 */
 // 初期処理ポーリング時間
 const const_polling_msec = 5000;
-
-/*
- 初期化
-*/
-// TODO ローカルストレージの領域は共有されないから、popupから
-// 保存した情報をリッスンで受け取る必要がある
-
 // ユーザークラス格納配列
 let userClassList = [];
-// ベース名リスト初期化
-var animalStorage = new StorageClass("animal_list");
-var animal_sto_str = animalStorage.getStorage();
-if (animal_sto_str == "None") {
-    alert('ベース名が初期化されてません');
-    animal_sto_str = animal_str; 
-}
-const animal_args = animalStorage.splitComma(animal_sto_str);
-
-// 先頭名初期化
-var firstStorage = new StorageClass("first_list");
-var first_str = firstStorage.getStorage();
-if (first_str == "None") {
-    alert('先頭名が初期化されてません');
-    first_str = firstname_str;
-}
-const init_firstname_array = firstStorage.splitComma(first_str);
-
-// 動物名初期読み込み
-//const animal_args = animal_str.split(/,/);
-//
-// 先頭名初期読み込み
-//var firstname_array = firstname_str.split(/,/);
-// 先頭名配列を重複削除して初期化
-//const init_firstname_array = firstname_array.filter((element, index) => {
- //   return firstname_array.indexOf(element) == index;
-//})
-
+// ベース名格納配列
+let animal_args = [];
 // 先頭名管理クラス初期化
-var firstnameClass = new FirstnameClass(init_firstname_array);
+let init_array =[];
+var firstnameClass = new FirstnameClass(init_array);
+// 共通変数初期化完了フラグ
+var init_param_flg = false;
+
+// 共通変数の初期化
+initParam();
+
+// 受信テスト
+//chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+//  if (request !== 'SET_BG') {
+//      console.log('Catchresuest');
+//      return true;
+//  }
+//      return false;
+//})
+//
+// TODO ロードのタイミングでbackground.js にある設定値を取得する
+
+// ここでは文字列('hello')でメッセージを送ってますが、オブジェクトでもよい
+//chrome.runtime.sendMessage('getSetting', (receive) => {
+//    // 送り返されるものがなければ、このコールバックは必要ない
+//    console.log(receive); // sendResponse で送り返された {} 空のObject
+//});
+
+
 
 /*
   監視設定
@@ -90,29 +82,63 @@ const config = {
 //タイマー登録で初回処理をした後に、定期状態監視を登録する
 var millisec = 0;
 const initInterval = function(){
-    // チャット一覧を取得
-    // 初期チャットが読み込まれるかわからないので、初めのn秒はポーリングで監視
-    var elements_list = document.getElementsByClassName('chat-line__message');
-    if (elements_list.length != 0 && millisec < const_polling_msec ){
-        // 初回の名前変更
-        initChangeChatName();
-        // 定期状態監視登録
-        observer.observe(elem, config);
-        // タイマ停止
-        clearInterval(initIntervalId);
-    }else if (millisec < const_polling_msec){
-        millisec += 10;
-    }else{
-        // 一定時間経過後は定期状態監視登録してタイマ停止
-        observer.observe(elem, config);
-        clearInterval(initIntervalId);
 
+    // 共通変数の初期化が完了してからチャットの初期化をする
+    if (init_param_flg){
+	    // チャット一覧を取得
+	    // 初期チャットが読み込まれるかわからないので、初めのn秒はポーリングで監視
+	    var elements_list = document.getElementsByClassName('chat-line__message');
+	    if (elements_list.length != 0 && millisec < const_polling_msec ){
+		// 初回の名前変更
+		initChangeChatName();
+		// 定期状態監視登録
+		observer.observe(elem, config);
+		// タイマ停止
+		clearInterval(initIntervalId);
+	    }else if (millisec < const_polling_msec){
+		millisec += 10;
+	    }else{
+		// 一定時間経過後は定期状態監視登録してタイマ停止
+		observer.observe(elem, config);
+		clearInterval(initIntervalId);
+	    }
     }
 
 };
 // 初期チャット読み込みに対応するためのポーリング処理とその後の定期監視を登録するタイマ
 let initIntervalId = setInterval(initInterval, 10);
 
+
+/*
+ 初期化関数
+*/
+async function initParam(){
+// ベース名リスト初期化
+var animalStorage = new StorageClass("animal_list");
+//var animal_sto_str = await animalStorage.getStorage();
+var animal_sto_str = await animalStorage.getLocalStorage();
+if (animal_sto_str == "") {
+    alert('ベース名がありません。\nデフォルトを使用します。');
+    animal_sto_str = animal_str; 
+}
+animal_args = animalStorage.splitComma(animal_sto_str);
+
+// 先頭名初期化
+var firstStorage = new StorageClass("first_list");
+var first_str = await firstStorage.getLocalStorage();
+if (first_str == "None") {
+    alert('先頭名がありません。\nデフォルトを使用します。');
+    first_str = firstname_str;
+}
+const init_firstname_array = firstStorage.splitComma(first_str);
+
+// 先頭名管理クラス初期化
+firstnameClass = new FirstnameClass(init_firstname_array);
+
+// 共通変数初期化完
+init_param_flg = true;
+
+}
 
 /*
   ここから共通関数
@@ -261,7 +287,7 @@ function periodicChangeNoticeName() {
 	      userClassList.push(userClass);
 	  } 
 	 // 置換後お知らせメッセージを作成
-	 if (noticClass.initFlg){
+	 if (noticeClass.initFlg){
 	     result_msg = tmp_name + noticeClass.split_msg;
 	     //お知らせメッセージを置換
              notice_message[0].textContent = result_msg;

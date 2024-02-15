@@ -2,7 +2,7 @@
 class NoticeClass {
 
     constructor(message) {
-        this.message = message; // TODO ここは""に括られてメッセージが来るから抽出は注意
+        this.message = message;
         this.stream_id = "ustreamer";
         this.split_msg = "";
 	this.init_flg = this.initSplitMsg(message);

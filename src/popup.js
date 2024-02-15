@@ -1,14 +1,5 @@
 console.log("popup.js is loaded");
 
-/*
- * popup.htmlのロードイベント
- */
-// 保存した設定にあるベース名リストと先頭名リストをテキストボックにいれる
-window.addEventListener('load',()=>{
-
-// Storage
-//var StorageClass = new StorageClass("test_key1", "test_value1");
-
 // ベース名の初期化
 chrome.storage.local.get(['animal_list'], function (value) {
     if (typeof value.animal_list === 'undefined') {
@@ -91,12 +82,22 @@ chrome.storage.local.get(['display_mode'], function (value) {
 	display_select.value = value.display_mode;
 	var index = int(value.display_mode);
 	    // TODO バッグてる？
-	display_select[1].selected = true;
+	display_select[index].selected = true;
     }
     // 保存処理
         //chrome.storage.local.set({'messages': value.messages }, function () {
     //});
 });
+
+/*
+ * popup.htmlのロードイベント
+ */
+// 保存した設定にあるベース名リストと先頭名リストをテキストボックにいれる
+window.addEventListener('load',()=>{
+
+// Storage
+//var StorageClass = new StorageClass("test_key1", "test_value1");
+
 })
 
 
@@ -165,6 +166,9 @@ document.getElementById("delete_first").addEventListener("click",()=>{
 // 設定保存ボタン
 document.getElementById("storage_save").addEventListener("click",()=>{
 
+	// TODO host id
+	var host_id = "";
+
         // ベース名リストのテキストを取得
 	var animal_input = document.getElementById("animal_text");
 	//animal_input.value = animal_str;
@@ -185,5 +189,19 @@ document.getElementById("storage_save").addEventListener("click",()=>{
         // 保存処理
         chrome.storage.local.set({'display_mode': display_select.value }, function () {
         });
+
+          // backgrounc.jsに設定を送信する
+	//  chrome.runtime.sendMessage({
+	//      hostId: host_id,
+	//      animalsName: animal_input.value,
+	//      firstsName: first_input.value,
+	//      displayMode: display_select.value
+	//    },
+        //    // 送った後にレスポンス受け取りたいならこう
+	//    //function(response) {
+        //    //  console.log("Return msg ->"+ response.msg);
+	//    //  //document.getElementById("div").textContent = response.msg;
+	// //}
+	//  );
 
 }, false);

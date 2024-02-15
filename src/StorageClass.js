@@ -20,21 +20,33 @@ class StorageClass {
 	savekey = this.key;
         chrome.storage.local.set({savekey: value }, function () { });
     }
+    /** 自身のkeyのものをstorageから取得する**/
+    // arg1 : なし
+    // return : keyで取得したvalue
+    getLocalStorage(key = null) {
+        return new Promise( (resolve) => {
+        	chrome.storage.local.get(this.key, (item) => {
+		    this.key ? resolve(item[this.key]) : resolve(item);
+		});
+	    });
+     }
+
 
     /** 自身のkeyのものをstorageから取得する**/
     // arg1 : なし
     // return : keyで取得したvalue
-    getStorage() {
+    async getStorage() {
 
       var result = "None";
-      chrome.storage.local.get([this.key], function (value) {
-	    if (typeof value.messages === 'undefined') {
+      //var key = this.key;
+     chrome.storage.local.get(this.key, function (value) {
+	    if (typeof value === 'undefined') {
                 result = "None";
 		console.log("getStorage not initilized");
 	    } else {
 		// ロードした内容をinput textに書き込み
 		//value.messages.push(message);
-		result = value.messages;
+		result = value;
 	    }
       });
       return result;

@@ -14,7 +14,6 @@ class UserClass {
     // arg1 : 今回変更するユーザーの名前
     // return : true -> 同じ名前, flse -> 違う名前
     confDefaultName(arg_name) {
-	// 多重登録防止の為、デフォルト名と動物名を確認もする
 	if (this.default_name == arg_name) return  true;
         return false;
     
@@ -32,8 +31,20 @@ class UserClass {
     /** 渡されたidが自身のstream_idか確認する関数 */
     // arg1 : 確認するid
     // return : true -> 同じid, flse -> 違うid
-    confStreamId(arg_id) {
+    //confStreamId(arg_id) {
+    //    if (this.stream_id == arg_id) return true;
+    //    return false;
+    //
+    //}
+    /** stream_idとdefault_nameの両方でユーザー同一確認をする関数 **/
+    /** ただし、同じdefault_nameが複数あるときは正しく判定できない(仕様)**/
+    // arg1 : id
+    // arg2 : 表示名
+    // return : true -> 同じユーザー, flse -> 違うユーザー
+    confSameUser(arg_id,arg_name) {
+        // streamIdとdefaultnameの両方で確認する
         if (this.stream_id == arg_id) return true;
+        else if (this.default_name == arg_name) return  true;
         return false;
     
     }

@@ -93,7 +93,7 @@ chrome.storage.local.get(['display_mode'], function (value) {
         console.log("init none");
         // htmlのテキストにセット
 	var display_select = document.getElementById("display_mode");
-	display_select.value = "1";
+	display_select.value = "0";
 	//display_select[1].selected = true;
 
         // 初期保存処理
@@ -108,7 +108,6 @@ chrome.storage.local.get(['display_mode'], function (value) {
 	var display_select = document.getElementById("display_mode");
 	display_select.value = value.display_mode;
 	var index = Number(value.display_mode);
-	    // TODO バッグてる？
 	display_select[index].selected = true;
     }
     // 保存処理

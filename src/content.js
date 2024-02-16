@@ -24,6 +24,8 @@ console.log("Taketake script loaded!");
 */
 // 初期処理ポーリング時間
 const const_polling_msec = 5000;
+// 配信者id
+var host_id = "";
 // ユーザークラス格納配列
 let userClassList = [];
 // ベース名格納配列
@@ -31,6 +33,8 @@ let animal_args = [];
 // 先頭名管理クラス初期化
 let init_array =[];
 var firstnameClass = new FirstnameClass(init_array);
+// 表示モード
+var display_mode = 0;
 // 共通変数初期化完了フラグ
 var init_param_flg = false;
 
@@ -95,12 +99,15 @@ let initIntervalId = setInterval(initInterval, 10);
  初期化関数
 */
 async function initParam(){
+// Host id 初期化
+var hostStorage = new StorageClass("host_id");
+host_id = await hostStorage.getLocalStorage();
+
 // ベース名リスト初期化
 var animalStorage = new StorageClass("animal_list");
-//var animal_sto_str = await animalStorage.getStorage();
 var animal_sto_str = await animalStorage.getLocalStorage();
 if (animal_sto_str == "") {
-    alert('ベース名がありません。\nデフォルトを使用します。');
+    //alert('ベース名がありません。\nデフォルトを使用します。');
     animal_sto_str = animal_str; 
 }
 animal_args = animalStorage.splitComma(animal_sto_str);
@@ -108,11 +115,15 @@ animal_args = animalStorage.splitComma(animal_sto_str);
 // 先頭名初期化
 var firstStorage = new StorageClass("first_list");
 var first_str = await firstStorage.getLocalStorage();
-if (first_str == "None") {
-    alert('先頭名がありません。\nデフォルトを使用します。');
+if (first_str == "") {
+    //alert('先頭名がありません。\nデフォルトを使用します。');
     first_str = firstname_str;
 }
 const init_firstname_array = firstStorage.splitComma(first_str);
+
+// 表示モード初期化
+var displayModeStorage = new StorageClass("display_mode");
+display_mode = Number(await displayModeStorage.getLocalStorage());
 
 // 先頭名管理クラス初期化
 firstnameClass = new FirstnameClass(init_firstname_array);
@@ -146,18 +157,20 @@ function initChangeChatName() {
 		  // 動物の名前になっていたら処理を1ループスキップ
 		  if (instance.confAnimalName(display_name_str) && !hit_flg) throw "This name processed";
 
-		  // リストにすでにidあり
-		  if (instance.confStreamId(stream_id) && !hit_flg){
+		  // リストにすでにユーザーあり
+		  if (instance.confSameUser(stream_id,display_name_str) && !hit_flg){
 		      tmp_name = instance.getAnimalName();
 		      // お知らせチャットを先にしてた場合、default_nameが無いので一応ここらでいれる
-		      instance.setDefaultNameIfBlank(display_name_str);
+		      // ↑無いのはidだが、ユニークにする方法が無いのでもう入れない
+		      //instance.setDefaultNameIfBlank(display_name_str);
 	              hit_flg = true;
 		  }
 	  });
 
-	  // TODO 設定で配信者の名前はフィルタしないようになっていたらそうする
-
-	  if(!hit_flg){
+	  // 設定で配信者の名前はフィルタしないようにする
+	  if(stream_id == host_id ){
+		  tmp_name = display_name_str;
+	  }else if(stream_id != host_id && !hit_flg){
 	          // リストに名前がなければ動物名生成とユーザー配列に新しく追加
 		  tmp_name = createAnimalName();
 		  var userClass = new UserClass(stream_id,display_name_str,tmp_name);
@@ -173,7 +186,6 @@ function initChangeChatName() {
               delete_target[0].textContent = "";
 	  }
       }catch (e){
-          // delete_targetがない人が大体なので、ここのlogが大量に出る
           //console.log(`Into catch e-> : ${e}`);
 
       }
@@ -203,16 +215,22 @@ function periodicChangeChatName() {
 		  if (instance.confAnimalName(display_name_str) && !hit_flg) throw "This name processed";
 
 		  // 置換後リストにすでにidあり
-		  if (instance.confStreamId(stream_id) && !hit_flg){
+                  // TODO UserClassにstream_idとdefault_nameをどちらも渡してすでにリストにあるか確認する
+                    // 関数をつくる？
+                    
+
+		  if (instance.confSameUser(stream_id,display_name_str) && !hit_flg){
 		      tmp_name = instance.getAnimalName();
 		      // お知らせチャットを先にしてた場合、default_nameが無いので一応ここらでいれる
-		      instance.setDefaultNameIfBlank(display_name_str);
+		      //instance.setDefaultNameIfBlank(display_name_str);
 	              hit_flg = true;
 		  }
 	  });
 
-	  // TODO 設定で配信者の名前はフィルタしないようになっていたらそうする
-	  if(!hit_flg){
+	  // 設定で配信者の名前はフィルタしないようにする
+	  if(stream_id == host_id ){
+		  tmp_name = display_name_str;
+	  }else if(stream_id != host_id && !hit_flg){
 	      // 置換後リストに名前がなければ動物名生成とユーザー配列に新しく追加
 	      tmp_name = createAnimalName();
 	      var userClass = new UserClass(stream_id,display_name_str,tmp_name);
@@ -255,7 +273,8 @@ function periodicChangeNoticeName() {
 	  // UserClassListを確認して置換後リストにidがあるか確認
 	  userClassList.forEach(instance => {
 		  // 置換後リストに同じidあり
-		  if (instance.confDefaultName(display_name_str) && !hit_flg){
+                  // TODO 個々の確認修正 UserClassと
+		  if (instance.confDefaultName(noticeClass.display_name) && !hit_flg){
 		      tmp_name = instance.getAnimalName();
 	              hit_flg = true;
 		  }
@@ -263,13 +282,14 @@ function periodicChangeNoticeName() {
 
 	  if(!hit_flg){
 	      // 置換後リストに名前がなければ動物名生成とユーザー配列に新しく追加
-	      // (ただし、表示名は取れないのでダミーを格納)
+	      // (ただし、idは取れないのでダミーを格納)
 	      tmp_name = createAnimalName();
-	      var userClass = new UserClass(noticeClass.stream_id,"",tmp_name);
+	      // stream_idはお知らせチャットから取れないのでblank
+	      var userClass = new UserClass("",noticeClass.display_name,tmp_name);
 	      userClassList.push(userClass);
 	  } 
 	 // 置換後お知らせメッセージを作成
-	 if (noticeClass.initFlg){
+	 if (noticeClass.init_flg){
 	     result_msg = tmp_name + noticeClass.split_msg;
 	     //お知らせメッセージを置換
              notice_message[0].textContent = result_msg;
@@ -291,11 +311,22 @@ function createAnimalName() {
 	var result = "ustreamer-23456";
 
 	try{
-		// TODO 設定の数字モードと先頭名付与モードで処理をシフト
-	   // if 
-	    // first_name +  持ってきた絵文字 + さんで名前を生成して返却
-            result = createNumberName();
-	    return result;
+
+            switch (display_mode){
+	        case 0:
+                    // 数字モードで生成
+                    result = createNumberName();
+	            return result;
+                    break;
+	        case 1:
+                    // 先頭名モードで生成
+                    result = createFirstName();
+	            return result;
+                    break;
+	        default:
+                    throw "Out of range Exeption";
+                    break;
+	   }
 
 	}catch (e){
             console.log(`Into catch e-> : ${e}`);

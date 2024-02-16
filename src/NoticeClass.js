@@ -20,7 +20,7 @@ class NoticeClass {
                  let tmp_msg = "が"+ reward_array[i] + "を引き換えました"
                  let tmp_result = message.split(tmp_msg);
 	         // 作成した文章を使って比較して、ヒットするものがあれば格納してbreak
-                 if(tmp_result.length != 0){
+                 if(tmp_result.length == 2){
                      this.display_name = tmp_result[0];
                      this.split_msg = tmp_msg;
                      return true;

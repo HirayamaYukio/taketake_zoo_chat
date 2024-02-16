@@ -135,7 +135,7 @@ display_mode = Number(await displayModeStorage.getLocalStorage());
 // 先頭名管理クラス初期化
 firstnameClass = new FirstnameClass(init_firstname_array);
 
-// 共通変数初期化完
+// 共通変数初期化完了
 init_param_flg = true;
 
 }
@@ -221,15 +221,9 @@ function periodicChangeChatName() {
 		  // 動物の名前になっていたら処理を1ループスキップ
 		  if (instance.confAnimalName(display_name_str) && !hit_flg) throw "This name processed";
 
-		  // 置換後リストにすでにidあり
-                  // TODO UserClassにstream_idとdefault_nameをどちらも渡してすでにリストにあるか確認する
-                    // 関数をつくる？
-                    
-
+		  // 置換後リストにすでにidもしくはnameがあるか確認する
 		  if (instance.confSameUser(stream_id,display_name_str) && !hit_flg){
 		      tmp_name = instance.getAnimalName();
-		      // お知らせチャットを先にしてた場合、default_nameが無いので一応ここらでいれる
-		      //instance.setDefaultNameIfBlank(display_name_str);
 	              hit_flg = true;
 		  }
 	  });
@@ -264,8 +258,8 @@ function periodicChangeNoticeName() {
     var elements_list = document.getElementsByClassName('user-notice-line');
     var elements_size = elements_list.length;
     
-    // とりあえず定期実行は最大5回しか回さないようにする
-    for (let i = 0; i < 5; i++) {
+    // とりあえず定期実行は最大3回しか回さないようにする
+    for (let i = 0; i < 3; i++) {
       try{
 	  // 後ろから回したいから新しいindexを作成
 	  var index = elements_size -i ;
@@ -273,7 +267,7 @@ function periodicChangeNoticeName() {
 	  // 引き換えメッセージの取得
           var notice_message = elements_list[index].getElementsByClassName('Layout-sc-1xcs6mc-0');
 	  // お知らせ情報クラスを作成
-	  var noticeClass = new NoticeClass(notice_message[0].textContent);
+	  var noticeClass = new NoticeClass(notice_message[0].textContent,reward_args);
 
 	  var hit_flg = false;
 	  var tmp_name = "ustreamer-12345";

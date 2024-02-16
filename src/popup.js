@@ -86,6 +86,28 @@ chrome.storage.local.set({'messages': value}, function () {
 });
 */
 
+// Rewardsの初期化
+chrome.storage.local.get(['reward_list'], function (value) {
+    if (typeof value.reward_list === 'undefined') {
+        // 初回はデータが存在しないためテンプレートを入れる
+        // htmlのテキストにセット
+	var reward_input = document.getElementById("reward_list");
+	reward_input.value = "";
+
+        // 初期保存処理
+            chrome.storage.local.set({'reward_list': "" }, function () {
+        });
+	
+    } else {
+	// ロードした内容をinput textに書き込み
+        //value.messages.push(message);
+        console.log("loaded date ->" + value.reward_list);
+        // htmlのテキストにセット
+	var reward_input = document.getElementById("reward_text");
+	reward_input.value = value.reward_list;
+    }
+});
+
 // 表示モードの初期化
 chrome.storage.local.get(['display_mode'], function (value) {
     if (typeof value.display_mode === 'undefined') {
@@ -192,6 +214,26 @@ document.getElementById("copy_first").addEventListener("click",()=>{
      //console.log("click!!!");  // 出力は、「ポップアップを検証」で見れる。
 }, false);
 
+//報酬リストのコピーボタン
+document.getElementById("copy_rewards").addEventListener("click",()=>{
+
+ const cb = new ClipboardJS('button#copy_rewards');
+ cb.on("success", function(e){
+     console.log('Copied Successfully.', e);
+     setTimeout(()=>{
+         console.log("time out");  // 出力は、「ポップアップを検証」で見れる。
+     },3000);
+ });
+ cb.on("error", function(e) {
+     console.error('Failed to Copy.', e);
+     setTimeout(()=>{
+         console.log("time out");  // 出力は、「ポップアップを検証」で見れる。
+     },3000);
+ });
+
+     //console.log("click!!!");  // 出力は、「ポップアップを検証」で見れる。
+}, false);
+
 // host idのクリアボタン
 document.getElementById("delete_host").addEventListener("click",()=>{
 
@@ -216,10 +258,18 @@ document.getElementById("delete_first").addEventListener("click",()=>{
 
 }, false);
 
+// 報酬リストのクリアボタン
+document.getElementById("delete_rewards").addEventListener("click",()=>{
+
+	var reward_input = document.getElementById("reward_text");
+	reward_input.value = "";
+
+}, false);
+
 // 設定保存ボタン
 document.getElementById("storage_save").addEventListener("click",()=>{
 
-	// host idのテキストソ取得
+	// host idのテキスト取得
 	var host_id = document.getElementById("host_id");
         // host id保存処理
         chrome.storage.local.set({'host_id': host_id.value }, function () {
@@ -227,21 +277,24 @@ document.getElementById("storage_save").addEventListener("click",()=>{
 
         // ベース名リストのテキストを取得
 	var animal_input = document.getElementById("animal_text");
-	//animal_input.value = animal_str;
         // ベース名保存処理
         chrome.storage.local.set({'animal_list': animal_input.value }, function () {
         });
 
         // 先頭名リストのテキストを取得
 	var first_input = document.getElementById("first_text");
-	//animal_input.value = animal_str;
         // 保存処理
         chrome.storage.local.set({'first_list': first_input.value }, function () {
         });
 
+	// 報酬リストのテキスト取得
+	var reward_list = document.getElementById("reward_text");
+        // reward_list保存処理
+        chrome.storage.local.set({'reward_list': reward_list.value }, function () {
+        });
+
         // 表示モードを取得
 	var display_select = document.getElementById("display_mode");
-	//animal_input.value = animal_str;
         // 保存処理
         chrome.storage.local.set({'display_mode': display_select.value }, function () {
         });

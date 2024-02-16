@@ -70,6 +70,10 @@ input#first_name{
   grid-area: first_name;
 }
 
+input#reward_text{
+  grid-area: rewards_text;
+}
+
 body{
   --height: 60px;
   display: grid;
@@ -77,6 +81,7 @@ body{
     "host_id copyHostBtn deleteHostBtn"
     "animal_name copyAnimalBtn deleteAnimalBtn"
     "first_name copyFirstBtn deleteFirstBtn"
+    "rewards_text copyRewardsBtn deleteRewardsBtn"
     "displayMode storageSave storageSave";
   grid-template-rows: var(--height) var(--height) var(--height) var(--height);
   grid-template-columns: 1fr 40px 40px;
@@ -105,6 +110,10 @@ button#copy_first{
   grid-area: copyFirstBtn;
 }
 
+button#copy_rewards{
+  grid-area: copyRewardsBtn;
+}
+
 button.delete{
   width: 40px;
   height: 40px;
@@ -125,17 +134,10 @@ button#delete_first{
   grid-area: deleteFirstBtn;
 }
 
-button.ttl{
-  grid-area: ttlBtn;
+button#delete_rewards{
+  grid-area: deleteRewardsBtn;
 }
 
-button.url{
-  grid-area: urlBtn;
-}
-
-button.bmark{
-  grid-area: markBtn;
-}
 
 p{
   z-index: 2;

@@ -33,6 +33,8 @@ let animal_args = [];
 // 先頭名管理クラス初期化
 let init_array =[];
 var firstnameClass = new FirstnameClass(init_array);
+// 報酬格納配列
+let reward_args = [];
 // 表示モード
 var display_mode = 0;
 // 共通変数初期化完了フラグ
@@ -120,6 +122,11 @@ if (first_str == "") {
     first_str = firstname_str;
 }
 const init_firstname_array = firstStorage.splitComma(first_str);
+
+// 報酬リスト初期化
+var rewardsStorage = new StorageClass("reward_list");
+var rewards_str = await rewardsStorage.getLocalStorage();
+reward_args = rewardsStorage.splitComma(rewards_str);
 
 // 表示モード初期化
 var displayModeStorage = new StorageClass("display_mode");
@@ -269,11 +276,11 @@ function periodicChangeNoticeName() {
 	  var noticeClass = new NoticeClass(notice_message[0].textContent);
 
 	  var hit_flg = false;
+	  var tmp_name = "ustreamer-12345";
           //var display_name_str = display_name[0].textContent;
 	  // UserClassListを確認して置換後リストにidがあるか確認
 	  userClassList.forEach(instance => {
-		  // 置換後リストに同じidあり
-                  // TODO 個々の確認修正 UserClassと
+		  // 置換後リストに同じdisplay_nameあり
 		  if (instance.confDefaultName(noticeClass.display_name) && !hit_flg){
 		      tmp_name = instance.getAnimalName();
 	              hit_flg = true;

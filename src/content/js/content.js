@@ -5,14 +5,14 @@
    初期チャットが読み込まれるまでポーリングして、チャットがあれば1-1.を行う。
    一定時間経過して初期チャットが読み込まれなければ1-2.を行う。
 
-   (ホントは読み込み完了イベントの検知で発火させたほうがいい)
- 1-1. 初期チャットへの置換処理(initChangeChatName();のcall)
+    1-1. 初期チャットへの置換処理(initChangeChatName();のcall)
     初期表示されたチャットへ名前変換の処理を行う(50行くらい)
-　　その後、定期監視処理2.を登録して自身を停止する。
- 1-2. 定期監視処理2.を登録して自身を停止する。
-
-2.  チャットが更新される(正確にはdocument.getElementById('root')以下)と
-    最新から数個のチャットに対して処理をする
+    その後、定期監視処理2.を登録して自身を停止する。
+    1-2. 定期監視処理2.を登録して自身を停止する。
+2. 定期監視機能はチャットが更新される(正確にはdocument.getElementById('root')以下)と
+   以下の項目に対して処理を行い
+  2-1.最新から数個のチャットに対してユーザー名の名前を置換する
+  2-2.ポイント交換の報酬に表示されているユーザー名の名前を置換する
 
 ! 拡張機能を止めるときはChromeの管理機能からして下さい。
 */
@@ -109,7 +109,7 @@ host_id = await hostStorage.getLocalStorage();
 var animalStorage = new StorageClass("animal_list");
 var animal_sto_str = await animalStorage.getLocalStorage();
 if (animal_sto_str == "") {
-    //alert('ベース名がありません。\nデフォルトを使用します。');
+    // リストが無いなら初期値を格納
     animal_sto_str = animal_str; 
 }
 animal_args = animalStorage.splitComma(animal_sto_str);
@@ -118,7 +118,7 @@ animal_args = animalStorage.splitComma(animal_sto_str);
 var firstStorage = new StorageClass("first_list");
 var first_str = await firstStorage.getLocalStorage();
 if (first_str == "") {
-    //alert('先頭名がありません。\nデフォルトを使用します。');
+    // リストが無いなら初期値を格納
     first_str = firstname_str;
 }
 const init_firstname_array = firstStorage.splitComma(first_str);
@@ -167,9 +167,6 @@ function initChangeChatName() {
 		  // リストにすでにユーザーあり
 		  if (instance.confSameUser(stream_id,display_name_str) && !hit_flg){
 		      tmp_name = instance.getAnimalName();
-		      // お知らせチャットを先にしてた場合、default_nameが無いので一応ここらでいれる
-		      // ↑無いのはidだが、ユニークにする方法が無いのでもう入れない
-		      //instance.setDefaultNameIfBlank(display_name_str);
 	              hit_flg = true;
 		  }
 	  });

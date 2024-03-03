@@ -258,8 +258,16 @@ function periodicChangeNoticeName() {
     // とりあえず定期実行は最大3回しか回さないようにする
     for (let i = 0; i < 3; i++) {
       try{
+	  // お知らせチャットが0の場合は処理をスキップ
+          if (elements_size < 1) throw "UserNoticeLine is None";
+
 	  // 後ろから回したいから新しいindexを作成
 	  var index = elements_size -i ;
+
+	  // TODO お知らせチャット置換確認
+	      // indexが-1の時と最新のお知らせチャットがpre変数と同じのときはスキップ
+	      //
+	      //
           //var animal = elements_list[index].getElementsByClassName('chat-author__display-name');
 	  // 引き換えメッセージの取得
           var notice_message = elements_list[index].getElementsByClassName('Layout-sc-1xcs6mc-0');
@@ -271,11 +279,23 @@ function periodicChangeNoticeName() {
           //var display_name_str = display_name[0].textContent;
 	  // UserClassListを確認して置換後リストにidがあるか確認
 	  userClassList.forEach(instance => {
+
+		  // 動物の名前になっていたら処理を1ループスキップ
+		  if (instance.confAnimalName(noticeClass.display_name) && !hit_flg) throw "This name processed";
+
+		  // 置換後リストにすでにidもしくはnameがあるか確認する
+		  if (instance.confSameUser("",noticeClass.display_name) && !hit_flg){
+		      tmp_name = instance.getAnimalName();
+	              hit_flg = true;
+		  }
+
+		  /*
 		  // 置換後リストに同じdisplay_nameあり
 		  if (instance.confDefaultName(noticeClass.display_name) && !hit_flg){
 		      tmp_name = instance.getAnimalName();
 	              hit_flg = true;
 		  }
+		  */
 	  });
 
 	  if(!hit_flg){

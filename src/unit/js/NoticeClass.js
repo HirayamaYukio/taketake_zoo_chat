@@ -22,7 +22,7 @@ class NoticeClass {
 	         // 作成した文章を使って比較して、ヒットするものがあれば格納してbreak
                  if(tmp_result.length == 2){
                      this.display_name = tmp_result[0];
-                     this.split_msg = tmp_msg;
+                     this.split_msg = tmp_result[1];
                      return true;
                  }
              }

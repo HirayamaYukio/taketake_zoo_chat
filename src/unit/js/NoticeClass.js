@@ -19,10 +19,12 @@ class NoticeClass {
 	     // 先頭から配列にある報酬メッセージでdisplay_nameを除外した文章を作成
                  let tmp_msg = "が"+ reward_array[i] + "を引き換えました"
                  let tmp_result = message.split(tmp_msg);
+                 let tmp_message = message.split(tmp_result[0]);
+		 var result_message = tmp_message[1]
 	         // 作成した文章を使って比較して、ヒットするものがあれば格納してbreak
                  if(tmp_result.length == 2){
                      this.display_name = tmp_result[0];
-                     this.split_msg = tmp_result[1];
+                     this.split_msg = result_message;
                      return true;
                  }
              }

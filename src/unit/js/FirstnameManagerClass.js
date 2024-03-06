@@ -30,9 +30,9 @@ class FirstnameClass {
 
     /* リスト内文字が無くなった時用の数字を文字列で返却する関数 */
     // arg : なし
-    // return :  [数字]の (string)
+    // return :  [数字] (string)
     getNumbername() {
-	    var result = String(this.number) + "の";
+	    var result = String(this.number);
 	    this.number++;
         return result;
     

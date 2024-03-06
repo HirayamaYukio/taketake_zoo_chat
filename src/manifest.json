@@ -1,21 +1,21 @@
 {
     "name": "TAKETAKE ZOO CHAT",
     "description": "taketake zoo chat",
-    "version": "1.0.3",
+    "version": "2.1.2",
     "manifest_version": 3,
     "content_scripts": [
 	        {
-			          "js": ["first_name.js","animal_temp.js","UserClass.js","FirstnameManagerClass.js","content.js"],
-			          "css": ["chat.css"],
+			          "js": ["initdata/js/first_name.js","initdata/js/animal_temp.js","unit/js/StorageClass.js","unit/js/NoticeClass.js","unit/js/UserClass.js","unit/js/FirstnameManagerClass.js","content/js/content.js"],
+			          "css": ["content/css/chat.css"],
 			          "matches": ["https://www.twitch.tv/popout/*"]
                 }
     ],
-    "permissions": [
-      "tabs"
+    "permissions": [ "tabs",
+	             "storage",
+                     "unlimitedStorage"
     ],
-
     "action": {
-        "default_popup": "popup.html"
+        "default_popup": "popup/html/popup.html"
     },
     "icons": {
     "16": "icon/taketake16_16.png",

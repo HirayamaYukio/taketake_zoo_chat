@@ -29,6 +29,14 @@ span[aria-hidden="true"] {
 }
 */
 
+/* 名前の後ろに改行を追加 */
+/*
+span[aria-hidden="true"]::after {
+    font-size: 12px;
+    content: "\r\n";
+}
+*/
+
 /* チャットバッジ消去 (注 サブスクバッチと名前どっちも消しちゃう)*/
 /*
 .chat-line__username-container span:first-child {
@@ -41,16 +49,16 @@ span[aria-hidden="true"] {
 .chat-line__message--emote-button {
     display: none !important;
 } 
-
 */
-/* Add 名前を削除 */
+
+/* 名前を削除 */
 /*
 .chat-line__username {
     display: none !important;
 }
 */
 
-/* Add ログインIDを削除 */
+/* ログインIDを削除 */
 /*
 .chat-author__intl-login {
     display: none !important;
@@ -58,22 +66,29 @@ span[aria-hidden="true"] {
 */
 
 /* メッセージのコンテナ */
-/*
 .chat-line__message {
     color: rgba(255, 255, 255, 1.0) !important;
     font-weight: bold !important;
-    font-size: 18px !important;
+    /*font-size: 18px !important;*/
+    font-size: 12px !important;
     text-shadow: #000 1px 1px 0, #000 -1px 1px 0, #000 1px -1px 0, #000 -1px -1px 0;
-    border-radius: 15px;
+    border-radius: 5px; /* ボーダーの角を丸くする*/
     margin-bottom: 3px !important;
     margin-left: 10px !important;
     margin-right: 10px !important;
     background: rgba(128, 128, 128, 0.5) !important;
     font-family: メイリオ;
-    padding: 5px 10px 5px 10px;
+    padding: 5px 10px 5px 10px;/* コンテンツとボーダ感のパディング */
     float: left;
     clear: both;
+    width: 95%;
 }
 
+.chat-line__message-container {
+    display: flex !important;
+    flex-direction: column !important;
+}
 
-*/
+.chat-line__username-container {
+    white-space: nowrap !important; /* ユーザー名が折り返さないようにするため */
+}

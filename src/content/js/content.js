@@ -264,13 +264,12 @@ function periodicChangeNoticeName() {
 	  // 後ろから回したいから新しいindexを作成
 	  var index = elements_size -i ;
 
-	  // TODO お知らせチャット置換確認
-	      // indexが-1の時と最新のお知らせチャットがpre変数と同じのときはスキップ
-	      //
-	      //
-          //var animal = elements_list[index].getElementsByClassName('chat-author__display-name');
 	  // 引き換えメッセージの取得
-          var notice_message = elements_list[index].getElementsByClassName('Layout-sc-1xcs6mc-0');
+          var notice_message = elements_list[index].getElementsByClassName('Layout-sc-1xcs6mc-0 kjARyu');
+          // お知らせメッセージのinnerHTMLを取得
+	  var innerHTML =  notice_message[0].innerHTML;
+
+
 	  // お知らせ情報クラスを作成
 	  var noticeClass = new NoticeClass(notice_message[0].textContent,reward_args);
 
@@ -289,13 +288,6 @@ function periodicChangeNoticeName() {
 	              hit_flg = true;
 		  }
 
-		  /*
-		  // 置換後リストに同じdisplay_nameあり
-		  if (instance.confDefaultName(noticeClass.display_name) && !hit_flg){
-		      tmp_name = instance.getAnimalName();
-	              hit_flg = true;
-		  }
-		  */
 	  });
 
 	  if(!hit_flg){
@@ -309,8 +301,10 @@ function periodicChangeNoticeName() {
 	 // 置換後お知らせメッセージを作成
 	 if (noticeClass.init_flg){
 	     result_msg = tmp_name + noticeClass.split_msg;
+	     // innerHTML内のテキストを置換
+	     var result_innerHTML = innerHTML.replace(noticeClass.getDisplayMsg(), result_msg);
 	     //お知らせメッセージを置換
-             notice_message[0].textContent = result_msg;
+             notice_message[0].innerHTML = result_innerHTML;
 	 }else{
              // noticeClassの初期化に失敗してたらエラー表示
              console.log("noticeClass initFlg is False");

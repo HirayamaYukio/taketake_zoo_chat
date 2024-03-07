@@ -202,8 +202,11 @@ function periodicChangeChatName() {
     var elements_size = elements_list.length;
     
     // とりあえず定期実行は最大5回しか回さないようにする
-    for (let i = 0; i < 5; i++) {
+    for (let i = 1; i <= 5; i++) {
       try{
+	  // チャットが0の場合は処理をスキップ
+          if (elements_size < 1) throw "ChatLine is None";
+
 	  // 後ろから回したいから新しいindexを作成
 	  var index = elements_size -i ;
           //var animal = elements_list[index].getElementsByClassName('chat-author__display-name');
@@ -256,7 +259,7 @@ function periodicChangeNoticeName() {
     var elements_size = elements_list.length;
     
     // とりあえず定期実行は最大3回しか回さないようにする
-    for (let i = 0; i < 3; i++) {
+    for (let i = 1; i <= 3; i++) {
       try{
 	  // お知らせチャットが0の場合は処理をスキップ
           if (elements_size < 1) throw "UserNoticeLine is None";
@@ -305,10 +308,8 @@ function periodicChangeNoticeName() {
 	     var result_innerHTML = innerHTML.replace(noticeClass.getDisplayMsg(), result_msg);
 	     //お知らせメッセージを置換
              notice_message[0].innerHTML = result_innerHTML;
-	 }else{
-             // noticeClassの初期化に失敗してたらエラー表示
-             console.log("noticeClass initFlg is False");
 	 }
+
       }catch (e){
           //console.log(`Into catch e-> : ${e}`);
 

@@ -100,6 +100,11 @@ let initIntervalId = setInterval(initInterval, 10);
 /*
  初期化関数
 */
+// TODO zipファイルをDLした初回起動でエラーがでちゃう。
+//      StorageClassがない場合の初期化がうまく行ってない？
+//      今度アップデートするときがあれば改修予定
+//
+//
 async function initParam(){
 // Host id 初期化
 var hostStorage = new StorageClass("host_id");
@@ -276,6 +281,8 @@ function periodicChangeNoticeName() {
 	  // お知らせ情報クラスを作成
 	  var noticeClass = new NoticeClass(notice_message[0].textContent,reward_args);
 
+          if (!noticeClass.init_flg) throw "Notic Class failed Init";
+
 	  var hit_flg = false;
 	  var tmp_name = "ustreamer-12345";
           //var display_name_str = display_name[0].textContent;
@@ -286,7 +293,7 @@ function periodicChangeNoticeName() {
 		  if (instance.confAnimalName(noticeClass.display_name) && !hit_flg) throw "This name processed";
 
 		  // 置換後リストにすでにidもしくはnameがあるか確認する
-		  if (instance.confSameUser("",noticeClass.display_name) && !hit_flg){
+		  if (instance.confDefaultName(noticeClass.display_name) && !hit_flg){
 		      tmp_name = instance.getAnimalName();
 	              hit_flg = true;
 		  }

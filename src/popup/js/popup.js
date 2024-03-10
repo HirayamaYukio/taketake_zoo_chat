@@ -7,25 +7,16 @@ console.log("popup.js is loaded");
 chrome.storage.local.get(['host_id'], function (value) {
     if (typeof value.host_id === 'undefined') {
         // 初回はデータが存在しないためテンプレートを入れる
-        // htmlのテキストにセット
 	var host_input = document.getElementById("host_id");
 	host_input.value = "";
-
         // 初期保存処理
-            chrome.storage.local.set({'host_id': "" }, function () {
-        });
-	
+        chrome.storage.local.set({'host_id': "" }, function () { });
+
     } else {
 	// ロードした内容をinput textに書き込み
-        //value.messages.push(message);
-        console.log("loaded date ->" + value.host);
-        // htmlのテキストにセット
 	var host_input = document.getElementById("host_id");
 	host_input.value = value.host_id;
     }
-    // 保存処理
-        //chrome.storage.local.set({'messages': value.messages }, function () {
-    //});
 });
 // ベース名の初期化
 chrome.storage.local.get(['animal_list'], function (value) {
@@ -37,72 +28,44 @@ chrome.storage.local.get(['animal_list'], function (value) {
 	animal_input.value = animal_str;
 
         // 初期保存処理
-            chrome.storage.local.set({'animal_list': animal_input.value }, function () {
-        });
+            chrome.storage.local.set({'animal_list': animal_input.value }, function () { });
 	
-    } else {
+     }else {
 	// ロードした内容をinput textに書き込み
-        //value.messages.push(message);
-        console.log("loaded date ->" + value.animal_list);
-        // htmlのテキストにセット
 	var animal_input = document.getElementById("animal_text");
 	animal_input.value = value.animal_list;
     }
-    // 保存処理
-        //chrome.storage.local.set({'messages': value.messages }, function () {
-    //});
 });
 
 // 先頭名の初期化
 chrome.storage.local.get(['first_list'], function (value) {
     if (typeof value.first_list === 'undefined') {
         // 初回はデータが存在しないためテンプレートを入れる
-        console.log("init none");
-        // htmlのテキストにセット
 	var first_input = document.getElementById("first_text");
 	first_input.value = firstname_str;
 
         // 初期保存処理
-        chrome.storage.local.set({'first_list': first_input.value }, function () {
-        });
+        chrome.storage.local.set({'first_list': first_input.value }, function () { });
 	
     } else {
 	// ロードした内容をinput textに書き込み
-        //value.messages.push(message);
-        console.log("loaded date ->" + value.first_list);
-        // htmlのテキストにセット
 	var first_input = document.getElementById("first_text");
 	first_input.value = value.first_list;
     }
-    // 保存処理
-        //chrome.storage.local.set({'messages': value.messages }, function () {
-    //});
 });
-
-// 保存
-/*
-chrome.storage.local.set({'messages': value}, function () {
-    console.log(value.messages);
-});
-*/
 
 // Rewardsの初期化
 chrome.storage.local.get(['reward_list'], function (value) {
     if (typeof value.reward_list === 'undefined') {
         // 初回はデータが存在しないためテンプレートを入れる
-        // htmlのテキストにセット
-	var reward_input = document.getElementById("reward_list");
+	var reward_input = document.getElementById("reward_text");
 	reward_input.value = "";
 
         // 初期保存処理
-            chrome.storage.local.set({'reward_list': "" }, function () {
-        });
+        chrome.storage.local.set({'reward_list': "" }, function () { });
 	
     } else {
 	// ロードした内容をinput textに書き込み
-        //value.messages.push(message);
-        console.log("loaded date ->" + value.reward_list);
-        // htmlのテキストにセット
 	var reward_input = document.getElementById("reward_text");
 	reward_input.value = value.reward_list;
     }
@@ -112,45 +75,20 @@ chrome.storage.local.get(['reward_list'], function (value) {
 chrome.storage.local.get(['display_mode'], function (value) {
     if (typeof value.display_mode === 'undefined') {
         // 初回はデータが存在しないためテンプレートを入れる
-        console.log("init none");
-        // htmlのテキストにセット
 	var display_select = document.getElementById("display_mode");
 	display_select.value = "0";
-	//display_select[1].selected = true;
 
         // 初期保存処理
-            chrome.storage.local.set({'display_mode': display_select.value }, function () {
-        });
+        chrome.storage.local.set({'display_mode': display_select.value }, function () { });
 	
     } else {
 	// ロードした内容でselectを変更
-        //value.messages.push(message);
-        console.log("loaded date ->" + value.display_mode);
-        // htmlのにセット
 	var display_select = document.getElementById("display_mode");
 	display_select.value = value.display_mode;
 	var index = Number(value.display_mode);
 	display_select[index].selected = true;
     }
-    // 保存処理
-        //chrome.storage.local.set({'messages': value.messages }, function () {
-    //});
 });
-
-/*
- * popup.htmlのロードイベント
- */
-// 保存した設定にあるベース名リストと先頭名リストをテキストボックにいれる
-window.addEventListener('load',()=>{
-
-// Storage
-//var StorageClass = new StorageClass("test_key1", "test_value1");
-
-})
-
-
-
-
 
 /*
  * popup.htmlにあるボタンのクリックイベント

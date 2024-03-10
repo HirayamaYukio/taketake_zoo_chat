@@ -100,11 +100,6 @@ let initIntervalId = setInterval(initInterval, 10);
 /*
  初期化関数
 */
-// TODO zipファイルをDLした初回起動でエラーがでちゃう。
-//      StorageClassがない場合の初期化がうまく行ってない？
-//      今度アップデートするときがあれば改修予定
-//
-//
 async function initParam(){
 // Host id 初期化
 var hostStorage = new StorageClass("host_id");
@@ -113,7 +108,7 @@ host_id = await hostStorage.getLocalStorage();
 // ベース名リスト初期化
 var animalStorage = new StorageClass("animal_list");
 var animal_sto_str = await animalStorage.getLocalStorage();
-if (animal_sto_str == "") {
+if (typeof animal_sto_str === 'undefined') {
     // リストが無いなら初期値を格納
     animal_sto_str = animal_str; 
 }
@@ -122,7 +117,7 @@ animal_args = animalStorage.splitComma(animal_sto_str);
 // 先頭名初期化
 var firstStorage = new StorageClass("first_list");
 var first_str = await firstStorage.getLocalStorage();
-if (first_str == "") {
+if (typeof first_str === 'undefined') {
     // リストが無いなら初期値を格納
     first_str = firstname_str;
 }
@@ -131,11 +126,19 @@ const init_firstname_array = firstStorage.splitComma(first_str);
 // 報酬リスト初期化
 var rewardsStorage = new StorageClass("reward_list");
 var rewards_str = await rewardsStorage.getLocalStorage();
+if (typeof rewards_str === 'undefined') {
+    // リストが無いなら初期値を格納
+    rewards_str = ""; 
+}
 reward_args = rewardsStorage.splitComma(rewards_str);
 
 // 表示モード初期化
 var displayModeStorage = new StorageClass("display_mode");
-display_mode = Number(await displayModeStorage.getLocalStorage());
+var display_mode_tmp = await displayModeStorage.getLocalStorage();
+if (typeof display_mode_tmp !== 'undefined') {
+    // リストがあれば数値変換
+    display_mode = Number(await displayModeStorage.getLocalStorage());
+}
 
 // 先頭名管理クラス初期化
 firstnameClass = new FirstnameClass(init_firstname_array);
@@ -159,9 +162,6 @@ function initChangeChatName() {
           var display_name = value.getElementsByClassName('chat-author__display-name');
           var display_name_str = display_name[0].textContent; // 名前の文字列だけを抽出
           var stream_id = display_name[0].getAttribute('data-a-user') // idの取得
-          // textContentが取得できない場合は非チャットとして処理をスキップ
-          //console.log(`OUT PUT will replace: ${animal[0].outerHTML}`);
-          //console.log(`OUT PUT will replace: ${animal[0].textContent}`);
           var tmp_name = "ustreamer-12345";
 	  var hit_flg = false;
 	  // UserClassListを確認して名前を変更したことがあるか確認
@@ -214,9 +214,7 @@ function periodicChangeChatName() {
 
 	  // 後ろから回したいから新しいindexを作成
 	  var index = elements_size -i ;
-          //var animal = elements_list[index].getElementsByClassName('chat-author__display-name');
           var display_name = elements_list[index].getElementsByClassName('chat-author__display-name');
-          // textContentが取得できない場合は非チャットとして処理をスキップ
           var tmp_name = "ustreamer-12345";
 	  var hit_flg = false;
           var display_name_str = display_name[0].textContent; // 表示名の取得
@@ -277,15 +275,15 @@ function periodicChangeNoticeName() {
           // お知らせメッセージのinnerHTMLを取得
 	  var innerHTML =  notice_message[0].innerHTML;
 
-
 	  // お知らせ情報クラスを作成
 	  var noticeClass = new NoticeClass(notice_message[0].textContent,reward_args);
 
+	  // Noticリストにヒットしなかったなどの理由で初期化ができなかったら、処理をスキップ
           if (!noticeClass.init_flg) throw "Notic Class failed Init";
 
 	  var hit_flg = false;
 	  var tmp_name = "ustreamer-12345";
-          //var display_name_str = display_name[0].textContent;
+
 	  // UserClassListを確認して置換後リストにidがあるか確認
 	  userClassList.forEach(instance => {
 
@@ -304,7 +302,7 @@ function periodicChangeNoticeName() {
 	      // 置換後リストに名前がなければ動物名生成とユーザー配列に新しく追加
 	      // (ただし、idは取れないのでダミーを格納)
 	      tmp_name = createAnimalName();
-	      // stream_idはお知らせチャットから取れないのでblank
+	      // stream_idはお知らせチャットから取れないのでblankで登録
 	      var userClass = new UserClass("",noticeClass.display_name,tmp_name);
 	      userClassList.push(userClass);
 	  } 
@@ -331,7 +329,6 @@ function createAnimalName() {
 	var result = "ustreamer-23456";
 
 	try{
-
             switch (display_mode){
 	        case 0:
                     // 数字モードで生成
